@@ -2,7 +2,7 @@ GET http://localhost:5050/search-ebay-products
 
 ###
 
-GET http://localhost:5050/getUsers
+GET http://localhost:5050/search-ebay-products
 
 ### Search eBay Products
 
