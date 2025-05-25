@@ -1,23 +1,2 @@
 GET http://localhost:5050/search-ebay-products
 
-###
-
-GET http://localhost:5050/search-ebay-products
-
-### Search eBay Products
-
-POST http://localhost:5050/addUser
-Content-Type: application/json
-
-{
-    "firstname": "Mohanone",
-    "lastname": "Reddy",
-    "password":"mohan123456M!@",
-    "email": "tamminenimohanreddyaad1@gmail.com",
-    "createdAt": "2023-10-01T12:00:00Z",
-    "updatedAt": "2023-10-01T12:00:00Z",
-    "profileImage": "https://media.istockphoto.com/id/1866495973/vector/economic-crisis-stock-chart-falling-down-business-global-money-bankruptcy-concept.jpg?s=1024x1024&w=is&k=20&c=asPCT7tzvtEe-bUxypmLmulY3oQ7prLOCvPJxcyCl1k=",
-    "role": "user",
-    "isActive": true,
-    "emailVerified":true
-}

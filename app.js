@@ -62,7 +62,6 @@ app.get('/search-ebay-products', async (req, res) => {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
-    // Step 1: Get token
     const tokenResponse = await fetch('https://api.sandbox.ebay.com/identity/v1/oauth2/token', {
       method: 'POST',
       headers: {
@@ -78,8 +77,7 @@ app.get('/search-ebay-products', async (req, res) => {
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
-    // Step 2: Use token
-    const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=bags', {
+    const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=shoes', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
