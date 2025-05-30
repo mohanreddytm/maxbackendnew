@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 
+const crypto = require('crypto');
+
+
 const app = express();
 const PORT = 5050;
 
@@ -61,14 +64,38 @@ app.post('/addUser', async (req, res) => {
 });
 
 
+const verificationToken = "mohanisthegreatestpersonofalltime"; // 32-80 chars, alphanumeric, _ and -
+
+const endpointUrl = "https://maxbackendnew.onrender.com/api/ebay/account-deletion-notification"; // your exact public webhook URL
+
+// GET for challenge verification
 app.get('/api/ebay/account-deletion-notification', (req, res) => {
-  const challengeCode = req.query.challenge_code;
-  if (challengeCode) {
-    // Respond with the exact challenge_code string eBay sends
-    return res.status(200).send(challengeCode);
-  }
-  // If no challenge_code, just send 400 Bad Request or something
-  res.status(400).send('Missing challenge_code');
+    const challengeCode = req.query.challenge_code;
+    if (!challengeCode) {
+        return res.status(400).send('Missing challenge_code');
+    }
+
+    // Hash challengeCode + verificationToken + endpointUrl
+    const hash = crypto.createHash('sha256');
+    hash.update(challengeCode);
+    hash.update(verificationToken);
+    hash.update(endpointUrl);
+    const challengeResponse = hash.digest('hex');
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({ challengeResponse });
+});
+
+// POST for receiving deletion notifications
+app.post('/api/ebay/account-deletion-notification', (req, res) => {
+    const notification = req.body;
+
+    // TODO: optionally verify signature header here (not shown)
+    // Log or process the deletion notification
+    console.log("Received deletion notification:", notification);
+
+    // Acknowledge the notification with a 200 OK (or 201, 202, 204)
+    res.sendStatus(200);
 });
 
 
