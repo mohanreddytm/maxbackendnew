@@ -15,14 +15,16 @@ require("dotenv").config();
 
 const {Pool} = require('pg');
 
+const clientId = process.env.EBAY_CLIENT_ID;
+const clientSecret = process.env.EBAY_CLIENT_SECRET;
+
+
 const databaseUrl = process.env.DATABASE_URL ;
 
 const pool = new Pool({
   connectionString: databaseUrl ,
 });
 
-const clientId = process.env.EBAY_CLIENT_ID;
-const clientSecret = process.env.EBAY_CLIENT_SECRET;
 
 app.get('/getUsers', async (req, res) => {
   try{
