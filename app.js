@@ -59,6 +59,21 @@ app.post('/addUser', async (req, res) => {
     res.status(500).json({ error: 'Failed to add user' });
   }
 });
+
+
+app.post('/api/ebay/account-deletion-notification', (req, res) => {
+  // Step 1: Verify the token (we'll talk about this soon)
+
+  // Step 2: Process the deletion request here
+  // You can extract user info from req.body and delete user data
+
+  console.log('Received eBay account deletion notification:', req.body);
+
+  res.sendStatus(200); // Tell eBay you received it successfully
+});
+
+
+
 app.get('/search-ebay-products', async (req, res) => {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
