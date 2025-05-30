@@ -61,19 +61,15 @@ app.post('/addUser', async (req, res) => {
 });
 
 
-app.post('/api/ebay/account-deletion-notification', (req, res) => {
-  if (req.body.challenge) {
-    // Respond with the challenge in plain text and correct content type
-    res.setHeader('Content-Type', 'text/plain');
-    return res.status(200).send(req.body.challenge);
+app.get('/api/ebay/account-deletion-notification', (req, res) => {
+  const challengeCode = req.query.challenge_code;
+  if (challengeCode) {
+    // Respond with the exact challenge_code string eBay sends
+    return res.status(200).send(challengeCode);
   }
-
-  console.log('Received eBay account deletion notification:', req.body);
-  res.sendStatus(200);
+  // If no challenge_code, just send 400 Bad Request or something
+  res.status(400).send('Missing challenge_code');
 });
-
-
-
 
 
 app.get('/search-ebay-products', async (req, res) => {
