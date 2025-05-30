@@ -62,15 +62,15 @@ app.post('/addUser', async (req, res) => {
 
 
 app.post('/api/ebay/account-deletion-notification', (req, res) => {
-  // Step 1: Verify the token (we'll talk about this soon)
-
-  // Step 2: Process the deletion request here
-  // You can extract user info from req.body and delete user data
+  if (req.body.challenge) {
+    return res.status(200).send(req.body.challenge);
+  }
 
   console.log('Received eBay account deletion notification:', req.body);
 
-  res.sendStatus(200); // Tell eBay you received it successfully
+  res.sendStatus(200);
 });
+
 
 
 
