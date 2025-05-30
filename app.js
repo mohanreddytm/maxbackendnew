@@ -57,12 +57,11 @@ app.post('/addUser', async (req, res) => {
     res.status(500).json({ error: 'Failed to add user' });
   }
 });
-
 app.get('/search-ebay-products', async (req, res) => {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
-    const response = await fetch('https://api.sandbox.ebay.com/identity/v1/oauth2/token', {
+    const tokenResponse = await fetch('https://api.sandbox.ebay.com/identity/v1/oauth2/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -74,8 +73,17 @@ app.get('/search-ebay-products', async (req, res) => {
       }),
     });
 
-    const data = await response.json();
-    const accessToken = data.access_token;
+    if (!tokenResponse.ok) {
+      throw new Error(`Token request failed with status ${tokenResponse.status}`);
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      throw new Error('Access token not found');
+    }
+
     const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=shoes', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -83,15 +91,18 @@ app.get('/search-ebay-products', async (req, res) => {
       },
     });
 
+    if (!productResponse.ok) {
+      throw new Error(`Product search failed with status ${productResponse.status}`);
+    }
+
     const productData = await productResponse.json();
     res.json(productData);
 
   } catch (err) {
-    console.error('Token fetch error:', err);
-    res.status(500).json({ error: 'Failed to get token' });
+    console.error('eBay API error:', err.message || err);
+    res.status(500).json({ error: 'Failed to fetch eBay products' });
   }
 });
-
 
 
 
