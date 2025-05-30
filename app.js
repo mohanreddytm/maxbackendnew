@@ -63,13 +63,15 @@ app.post('/addUser', async (req, res) => {
 
 app.post('/api/ebay/account-deletion-notification', (req, res) => {
   if (req.body.challenge) {
+    // Respond with the challenge in plain text and correct content type
+    res.setHeader('Content-Type', 'text/plain');
     return res.status(200).send(req.body.challenge);
   }
 
   console.log('Received eBay account deletion notification:', req.body);
-
   res.sendStatus(200);
 });
+
 
 
 
