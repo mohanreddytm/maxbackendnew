@@ -103,7 +103,7 @@ app.get('/search-ebay-products', async (req, res) => {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
-    const tokenResponse = await fetch('https://api.sandbox.ebay.com/identity/v1/oauth2/token', {
+    const tokenResponse = await fetch('https://api.ebay.com/identity/v1/oauth2/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -126,7 +126,7 @@ app.get('/search-ebay-products', async (req, res) => {
       throw new Error('Access token not found');
     }
 
-    const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=trending', {
+    const productResponse = await fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=trending', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
