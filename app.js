@@ -58,7 +58,7 @@ app.post('/addUser', async (req, res) => {
   }
 });
 
-app.get('/get-ebay-token', async (req, res) => {
+app.get('/search-ebay-products', async (req, res) => {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
@@ -75,19 +75,7 @@ app.get('/get-ebay-token', async (req, res) => {
     });
 
     const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    console.error('Token fetch error:', err);
-    res.status(500).json({ error: 'Failed to get token' });
-  }
-});
-
-app.get('/search-ebay-products', async (req, res) => {
-
-  try {
-      const accessToken = "v^1.1#i^1#p^1#r^0#I^3#f^0#t^H4sIAAAAAAAA/+VYe2wURRi/V8ECFXnJIxrOLfigub3Z27vbu5W75vqAttCH3B3SJopzu7PttrcPdva4HhU9S4rBAGKixoACiZJIE1GIJMYg0SgNEEUxRBNjGpCg+EhMUCP/EN29HuVaCSB3iU3cfzYz8803v99vvm/m2wXZSeVLNjds/rPCOtm2NwuyNquVmgrKJ5VV3Wm3LSizgAID697soqyj335xKYZSUmVXIawqMkbOXikpYzbXGSJSmswqEIuYlaGEMKtzbDTSvJL1kIBVNUVXOCVJOBvrQkTQixjE+OhAgIGCX6CNXvmqz5gSIjhGQH5A+z20j6dRwhzHOIUaZaxDWQ8RHuDxuYDPRYMYoFk6yFIUGaS9HYRzNdKwqMiGCQmIcA4um5urFWC9MVSIMdJ0wwkRbowsi7ZGGuvqW2JL3QW+wnkdojrUU3hsq1bhkXM1TKbQjZfBOWs2muI4hDHhDo+sMNYpG7kK5jbg56RGFO2BNE9RQYaGXj9TEimXKZoE9RvjMHtE3iXkTFkk66KeuZmihhqJbsTp+VaL4aKxzmm+HknBpCiISAsR9TWR9khbGxFuVrqgETa8S8pIsFeRkStas8bFQAYghg/4XZRAMwzye/ILjXjLyzxupVpF5kVTNOxsUfQaZKBG47XxFGhjGLXKrVpE0E1EhXa+qxp6mA5zU0d2MaV3yea+IskQwplr3nwHRmfruiYmUjoa9TB+ICdRiICqKvLE+MFcLObDpxeHiC5dV1m3O51Ok2maVLROtwcAyr2meWWU60ISJAxbM9dH7MWbT3CJOSocMmZikdUzqoGl14hVA4DcSYS9Xh8ToPK6j4UVHt/7j44Czu6xGVGqDPFAwSsEKQoALxMEnLcUGRLOB6nbxIESMOOSoNaDdDUJOeTijDhLSUgTeZb2CR46ICAX7w8KLm9QEFwJH2/GLkIAoUSCCwb+T4lyq6EeRZyG9JLEesnivDtBP7rM3Z4OatE2Ve6O+zNyi7vZH4yqy4OrupvqVblV6orhDKrCoVvNhuuSr02KhjIxY/1SCGDmeulEaFCwjvii6EU5RUVtSlLkMhNrg2mNb4OanqlJZYx2FCWTxqsoqhFVbSzNiV0ykv/ysLg93qW7qf6jW+q6rLAZuBOLlTkfGw6gKpLGPWTmeobkFMmtQKMIMbvX5lAXxVs06tcJxdogaLLNkCI/UniSObokXs+RGsJKSjNqbrLVrMNiSg+SjVtN15RkEmmri4sAM58lKaXDRBJNtMQuQYCLcIJduRTjDfgYP+0rjheXu1DXTrQjqbij2NFcVHHtHvupH7bkHqrfehL0W4dsViuoAy6qCjw0yR532KcRWNQRiaHMJ5ReUoQCicVO2fiS1RDZgzIqFDXbLMuZn3ZE20+veO/loxvWPUNWD1nKC/447H0MzBv951Bup6YW/IAA91wbKaOmz63w+ICPBoCmjcq9A1ReG3VQdztmT7MMZJuP25sOnrVtiXz9zLoH/9q1H1SMGlmtZRZHv9Wy6Ts489WBhy/MObxx9xtLGgZr9zRNl6+89klldOPG3e+/ngF9xz+IT2k7sWLWafuBD6v2PUs56584PKN+XvCbynX3HttUF8+8/eX2bx2XQ1O/OjUcX7J/vrItu+fjOcPPX+o6dmj29skvsjOkkyuWVyxMvzs0PLj8ssOmh/dtm6n2HIx99vPxB4YHK6urUwteuFhl++PAlQ3nW/vSjuo35z6e+qLhx/uO3KU+deoI1dR3YfvOY0+2r2SEwTOb3mG1+7//iPh9CrP1h98Wckf7f+l9a9v8c+fuWP8rfX7Hrnin7bnA/Pph8tKJE9WvnH3606rJV2JbX+r+fPEstGoovmh4QFlc29FXc/TQwJYebefInv4NX6jVTAsSAAA=";
-      
-
+    const accessToken = data.access_token;
     const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=shoes', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -97,11 +85,14 @@ app.get('/search-ebay-products', async (req, res) => {
 
     const productData = await productResponse.json();
     res.json(productData);
+
   } catch (err) {
-    console.error('Error:', err);
-    res.status(500).json({ error: 'Failed to fetch eBay data' });
+    console.error('Token fetch error:', err);
+    res.status(500).json({ error: 'Failed to get token' });
   }
 });
+
+
 
 
 
