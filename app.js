@@ -58,10 +58,34 @@ app.post('/addUser', async (req, res) => {
   }
 });
 
+app.get('/get-ebay-token', async (req, res) => {
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+
+  try {
+    const response = await fetch('https://api.sandbox.ebay.com/identity/v1/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${credentials}`,
+      },
+      body: new URLSearchParams({
+        grant_type: 'client_credentials',
+        scope: 'https://api.ebay.com/oauth/api_scope',
+      }),
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('Token fetch error:', err);
+    res.status(500).json({ error: 'Failed to get token' });
+  }
+});
+
 app.get('/search-ebay-products', async (req, res) => {
 
   try {
-      const accessToken = "v^1.1#i^1#f^0#p^1#r^0#I^3#t^H4sIAAAAAAAA/+VYe2wURRi/6wtLKSTIK4U/jgVRqLu3e3d7j4W7cqWFHtAH3FFpQ23mdufabffFzpztIcTSEELBB8YoRgmpGB+Bpv5h8JEoahqJr0AUFTUm4isQE4iJgiaa6Oy2lGslgPQSm3jJZTMz33zz+/3m+2a+XbanqHjZ7prdv5U6p+T197A9eU4nV8IWFxWWT8/PKyt0sFkGzv6exT0FvfnnVyCgKoawESJD1xB0dauKhgS7M0ylTU3QAZKRoAEVIgGLQjxau17wMKxgmDrWRV2hXLGqMBXkfX7WF0ql+GAwCJKA9GpXfCb0MOX1e0I+jpP8fMgbAjwZRigNYxrCQMNhysN6eJrlaQ+fYHnBwwpenglwgWbK1QhNJOsaMWFYKmKjFey5ZhbU6yMFCEETEydUJBZdHa+Pxqqq6xIr3Fm+IiMyxDHAaTS2tUqXoKsRKGl4/WWQbS3E06IIEaLckeEVxjoVolfA3AJ8W2kOSlJA8npDnIcN8cncSLlaN1WAr4/D6pElOmWbClDDMs7cSFGiRrIDinikVUdcxKpc1mNDGihySoZmmKqujDZFGxqoSK3eDkjUSLSaUUG3rkE6XrmZDoAACwNS0E9zKW8gAP2ekYWGvY3IPG6lVbomyZZoyFWn40pIUMPx2nBZ2hCjeq3ejKawhSjbLjCqoafZ2tThXUzjds3aV6gSIVx288Y7MDobY1NOpjEc9TB+wJYoTAHDkCVq/KAdiyPh043CVDvGhuB2d3V1MV1eRjfb3B6W5dyba9fHxXaoklwktlau2/byjSfQsk1FhGQmkgWcMQiWbhKrBIDWRkV8Pj4Q5EZ0HwsrMr73Hx1ZnN1jMyJXGQIASAalACeKftHjE0EuMiQyEqRuCwdMggytArMTYkMBIqRFEmdpFZqyRHylPN5gCtKSP5SirRORTvKSFbsQshAmk2Io+H9KlJsN9TgUTYhzE+u5ivOOpPee1e6mrpAZbzC0jk3+jFbnrvWH4saa0MaOtdWGVq+2J1AGlqPwzWbDNcmvUmSiTIKsnxMBrFzPmQg1OsJQmhC9uKgbsEFXZDEzuTbYa0oNwMSZynSGtONQUchjQlSjhhHL0YmdK5L/8rC4Nd45vKn+m1vqmqyQFbiTi5U1HxEHwJAZ6x6ycp0RddWtA1KEWN2tNuoJ8ZZJ/TqpWBOCNltGloYLT8amy6D7RMaESE+bpOZm6q06LKF3Qo3catjUFQWajROLACufVTWNQVKBky2xcxDgMphkVy4X8AU5nvV5+QnxEu0LtXWyHUkTPIoL1k+kuHaPfdOPOOwf1+v8gO11nshzOtkqlubK2aVF+ZsK8qdRSMaQQUCTkno3I4MUg+Q2jbzJmpDphBkDyGbe7Y5Pf9ofb/p43WtPHN+2dSdTccJRnPXBob+FnTf6yaE4nyvJ+v7ALrg6UsjNmFvq4Vne/rNevplddHW0gJtTMGvf0r6d8mdTV7xanQqsnXcwNaO9dDlbOmrkdBY6CnqdjsotlemvuraezZOe7dt+sXLaPHpPjfTD6Z8F9OtL1S9fXhdRmkoynz/95Tvbj9SUDczYUfvh6aFdf24baJiZqGl/pMG3ZMG+N1R8atvFB84//txdQyf3zK44u1N5aDbXO23qnMYnT5fufvTAt2XSIdT6Qtv8LU+1rrs7PP/ywL5lxx21jftbUv1fNy/v/P7tRW92DbV8MnDsI+H5uWfUc3/9eFD1bV5z4veKsnsHv+BbT1VwK5MLHQc2LBl8a0rgkuDdoX737mPn3nvGf/6VkqOHhk4eRpHWXQ9eaP3lwh7zjurB2OIjd5bv7Zu1uOk216D6uvBHy5lvjKJL7x9/ceY5/tRSbvpCfPThvsP3H9u7cnhP/wazIt/sChIAAA==";
+      const accessToken = "v^1.1#i^1#p^1#r^0#I^3#f^0#t^H4sIAAAAAAAA/+VYe2wURRi/V8ECFXnJIxrOLfigub3Z27vbu5W75vqAttCH3B3SJopzu7PttrcPdva4HhU9S4rBAGKixoACiZJIE1GIJMYg0SgNEEUxRBNjGpCg+EhMUCP/EN29HuVaCSB3iU3cfzYz8803v99vvm/m2wXZSeVLNjds/rPCOtm2NwuyNquVmgrKJ5VV3Wm3LSizgAID697soqyj335xKYZSUmVXIawqMkbOXikpYzbXGSJSmswqEIuYlaGEMKtzbDTSvJL1kIBVNUVXOCVJOBvrQkTQixjE+OhAgIGCX6CNXvmqz5gSIjhGQH5A+z20j6dRwhzHOIUaZaxDWQ8RHuDxuYDPRYMYoFk6yFIUGaS9HYRzNdKwqMiGCQmIcA4um5urFWC9MVSIMdJ0wwkRbowsi7ZGGuvqW2JL3QW+wnkdojrUU3hsq1bhkXM1TKbQjZfBOWs2muI4hDHhDo+sMNYpG7kK5jbg56RGFO2BNE9RQYaGXj9TEimXKZoE9RvjMHtE3iXkTFkk66KeuZmihhqJbsTp+VaL4aKxzmm+HknBpCiISAsR9TWR9khbGxFuVrqgETa8S8pIsFeRkStas8bFQAYghg/4XZRAMwzye/ILjXjLyzxupVpF5kVTNOxsUfQaZKBG47XxFGhjGLXKrVpE0E1EhXa+qxp6mA5zU0d2MaV3yea+IskQwplr3nwHRmfruiYmUjoa9TB+ICdRiICqKvLE+MFcLObDpxeHiC5dV1m3O51Ok2maVLROtwcAyr2meWWU60ISJAxbM9dH7MWbT3CJOSocMmZikdUzqoGl14hVA4DcSYS9Xh8ToPK6j4UVHt/7j44Czu6xGVGqDPFAwSsEKQoALxMEnLcUGRLOB6nbxIESMOOSoNaDdDUJOeTijDhLSUgTeZb2CR46ICAX7w8KLm9QEFwJH2/GLkIAoUSCCwb+T4lyq6EeRZyG9JLEesnivDtBP7rM3Z4OatE2Ve6O+zNyi7vZH4yqy4OrupvqVblV6orhDKrCoVvNhuuSr02KhjIxY/1SCGDmeulEaFCwjvii6EU5RUVtSlLkMhNrg2mNb4OanqlJZYx2FCWTxqsoqhFVbSzNiV0ykv/ysLg93qW7qf6jW+q6rLAZuBOLlTkfGw6gKpLGPWTmeobkFMmtQKMIMbvX5lAXxVs06tcJxdogaLLNkCI/UniSObokXs+RGsJKSjNqbrLVrMNiSg+SjVtN15RkEmmri4sAM58lKaXDRBJNtMQuQYCLcIJduRTjDfgYP+0rjheXu1DXTrQjqbij2NFcVHHtHvupH7bkHqrfehL0W4dsViuoAy6qCjw0yR532KcRWNQRiaHMJ5ReUoQCicVO2fiS1RDZgzIqFDXbLMuZn3ZE20+veO/loxvWPUNWD1nKC/447H0MzBv951Bup6YW/IAA91wbKaOmz63w+ICPBoCmjcq9A1ReG3VQdztmT7MMZJuP25sOnrVtiXz9zLoH/9q1H1SMGlmtZRZHv9Wy6Ts489WBhy/MObxx9xtLGgZr9zRNl6+89klldOPG3e+/ngF9xz+IT2k7sWLWafuBD6v2PUs56584PKN+XvCbynX3HttUF8+8/eX2bx2XQ1O/OjUcX7J/vrItu+fjOcPPX+o6dmj29skvsjOkkyuWVyxMvzs0PLj8ssOmh/dtm6n2HIx99vPxB4YHK6urUwteuFhl++PAlQ3nW/vSjuo35z6e+qLhx/uO3KU+deoI1dR3YfvOY0+2r2SEwTOb3mG1+7//iPh9CrP1h98Wckf7f+l9a9v8c+fuWP8rfX7Hrnin7bnA/Pph8tKJE9WvnH3606rJV2JbX+r+fPEstGoovmh4QFlc29FXc/TQwJYebefInv4NX6jVTAsSAAA=";
       
 
     const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=shoes', {
