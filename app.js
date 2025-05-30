@@ -86,7 +86,7 @@ app.get('/search-ebay-products', async (req, res) => {
       throw new Error('Access token not found');
     }
 
-    const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=shoes', {
+    const productResponse = await fetch('https://api.sandbox.ebay.com/buy/browse/v1/item_summary/search?q=bags', {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
