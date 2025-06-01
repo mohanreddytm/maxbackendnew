@@ -100,6 +100,7 @@ app.post('/api/ebay/account-deletion-notification', (req, res) => {
 
 
 app.get('/search-ebay-products', async (req, res) => {
+  const [searchInput] = req.params;
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
@@ -126,7 +127,7 @@ app.get('/search-ebay-products', async (req, res) => {
       throw new Error('Access token not found');
     }
 
-    const productResponse = await fetch('https://api.ebay.com/buy/browse/v1/item_summary/search?q=trending', {
+    const productResponse = await fetch(`https://api.ebay.com/buy/browse/v1/item_summary/search?q=${searchInput}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
