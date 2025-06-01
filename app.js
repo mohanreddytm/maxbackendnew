@@ -99,8 +99,8 @@ app.post('/api/ebay/account-deletion-notification', (req, res) => {
 });
 
 
-app.get('/search-ebay-products', async (req, res) => {
-  const [searchInput] = req.params;
+app.get('/search-ebay-products/:searchInput', async (req, res) => {
+  const searchInput = req.params.searchInput;
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
